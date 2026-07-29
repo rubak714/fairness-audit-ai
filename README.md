@@ -17,7 +17,7 @@ The audit sits on the right. A human makes the final call, because a person shou
 decide important things, not a machine. The dotted arrow shows the same fairness
 idea reused on a chatbot AI.
 
-![Workflow of FairnessAudit-AI](docs/workflow.png)
+![Workflow of FairnessAudit-AI](docs/how-it-works.png)
 
 I draw this picture from code, so it stays in sync with the project. Regenerate it
 any time with `python make_diagram.py`.
