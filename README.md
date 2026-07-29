@@ -12,12 +12,12 @@ in action.
 
 ## 🗺️ How it all works (whiteboard workflow)
 
-Here is the whole project sketched on a whiteboard. Data comes in at the top left.
+Here is the whole project as a simple box diagram. Data comes in at the top left.
 The audit sits on the right. A human makes the final call, because a person should
 decide important things, not a machine. The dotted arrow shows the same fairness
 idea reused on a chatbot AI.
 
-![Whiteboard workflow of FairnessAudit-AI](docs/workflow.png)
+![Workflow of FairnessAudit-AI](docs/workflow.png)
 
 I draw this picture from code, so it stays in sync with the project. Regenerate it
 any time with `python make_diagram.py`.
