@@ -71,4 +71,19 @@ flowchart TB
 | `llm_reliability.py` | Tests a chatbot style AI. It changes "she" to "he" in a question and checks if the answer changes. |
 | `tests/` | Small unit tests that check the data, the metrics, and the chatbot probe. |
 
+## How to run it
+
+You type these lines one at a time in a terminal:
+
+```bash
+pip install -r requirements.txt
+
+python model.py             # step 1: make the data and train the model
+python fairness_audit.py    # step 2: measure the unfairness, then fix it
+python llm_reliability.py   # step 3: test the chatbot AI
+```
+
+It all runs on your own computer. You do not need the internet. You do not need a
+paid AI account. To run the tests: `pip install -r requirements-dev.txt` then `pytest`.
+
 Work in progress. More coming soon.
