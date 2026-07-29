@@ -8,9 +8,12 @@ testing the maths, not the model.
 import numpy as np
 
 from fairness_audit import (
+    apply_group_thresholds,
     equal_opportunity_difference,
+    find_group_thresholds,
     statistical_parity_difference,
 )
+from model import generate_loan_dataset, train_baseline
 
 
 def test_statistical_parity_is_zero_when_groups_are_equal():
@@ -28,3 +31,20 @@ def test_equal_opportunity_flags_an_unfair_case():
     group = np.array([0, 0, 1, 1])
     # TPR(group0) - TPR(group1) = 0 - 1 = -1
     assert equal_opportunity_difference(y_true, y_pred, group) == -1.0
+
+
+def test_mitigation_reduces_the_equal_opportunity_gap():
+    # the whole promise of the project: the fix should shrink the unfairness.
+    df = generate_loan_dataset(seed=0)
+    trained = train_baseline(df)
+    y_true = trained.y_test.to_numpy()
+    group = trained.sensitive_test.to_numpy()
+    y_prob = trained.y_prob
+
+    before = abs(equal_opportunity_difference(y_true, (y_prob >= 0.5).astype(int), group))
+
+    thresholds = find_group_thresholds(y_true, y_prob, group)
+    after_pred = apply_group_thresholds(y_prob, group, thresholds)
+    after = abs(equal_opportunity_difference(y_true, after_pred, group))
+
+    assert after <= before
