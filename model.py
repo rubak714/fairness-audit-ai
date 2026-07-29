@@ -26,10 +26,14 @@ RANDOM_STATE = 42           # a fixed number so the results are the same every r
 
 
 def generate_loan_dataset(n_samples: int = 5000, seed: int = RANDOM_STATE) -> pd.DataFrame:
-    """Make a pretend loan dataset.
+    """Make a pretend loan dataset that hides a real problem.
 
-    For now this only uses fair information: things a bank is allowed to look at,
-    like income and credit score. I add the unfair part in the next step.
+    My idea in plain words:
+      - There is a fair reason to approve someone (good income, good credit,
+        steady job). This part has nothing to do with gender.
+      - Then I add a small unfair penalty to one group. This copies real life,
+        where past loan decisions were themselves unfair. So the unfairness is
+        hidden inside the answers, not in an obvious column.
     """
     rng = np.random.default_rng(seed)
 
@@ -54,8 +58,13 @@ def generate_loan_dataset(n_samples: int = 5000, seed: int = RANDOM_STATE) -> pd
         + rng.normal(0, 1, n_samples)   # a little randomness, like real life
     )
 
+    # here is the unfair part. group 0 gets pushed down for no fair reason.
+    # this is the bias I want my test to catch later.
+    historical_penalty = np.where(gender == 0, -0.9, 0.0)
+
     # turn the score into a yes/no answer.
-    approval_prob = 1 / (1 + np.exp(-z))   # squashes score into 0..1
+    approval_logit = z + historical_penalty
+    approval_prob = 1 / (1 + np.exp(-approval_logit))   # squashes score into 0..1
     approved = (rng.uniform(0, 1, n_samples) < approval_prob).astype(int)
 
     df = pd.DataFrame(
