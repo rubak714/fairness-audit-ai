@@ -139,4 +139,20 @@ the unfairness drops almost to zero.
 - **MLOps.** The practice of running AI systems reliably in the real world, the
   way IT teams keep servers running.
 
+## What this project cannot do yet (being honest)
+
+I would rather say these first than have someone catch me.
+
+- The loan data is made up by me. That is good for testing, but real data is
+  messier.
+- My fix is a simple starting point. It may not work in every situation.
+- The chatbot in my test is a small fake one. It shows the idea. It is not a real
+  chatbot yet.
+- I only check one thing (gender). Real life is more complex, because people
+  belong to many groups at once.
+
+## License
+
+MIT. You are free to use it, learn from it, and tell me where I am wrong.
+
 Work in progress. More coming soon.
