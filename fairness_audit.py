@@ -137,3 +137,13 @@ def find_group_thresholds(y_true, y_prob, group, grid=None):
             best_gap, best_t = gap, t
     thr[0] = float(best_t)
     return thr
+
+
+def apply_group_thresholds(y_prob, group, thresholds) -> np.ndarray:
+    """Turn scores into yes/no answers, using each group's own cutoff."""
+    y_prob = np.asarray(y_prob)
+    group = np.asarray(group)
+    out = np.zeros(len(y_prob), dtype=int)
+    for g, t in thresholds.items():
+        out[group == g] = (y_prob[group == g] >= t).astype(int)
+    return out
