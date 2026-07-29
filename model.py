@@ -1,0 +1,73 @@
+"""
+model.py
+
+Step 1: make a dataset and train a first AI model.
+
+I picked a loan example. The AI has to guess "approve this loan" or "reject it".
+This is a good example because a wrong guess hurts a real person.
+
+Instead of downloading data, I create it here in code. Two reasons:
+  1. The whole project runs on my own computer, no internet needed.
+  2. I hide the unfairness myself, so later I can check if my test finds it.
+
+To run just this file:  python model.py
+"""
+
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+
+
+# I keep these names in one place so I do not spell them wrong in other files.
+SENSITIVE_ATTR = "gender"   # the personal detail I want to be fair about
+TARGET = "approved"         # the thing the AI tries to guess
+RANDOM_STATE = 42           # a fixed number so the results are the same every run
+
+
+def generate_loan_dataset(n_samples: int = 5000, seed: int = RANDOM_STATE) -> pd.DataFrame:
+    """Make a pretend loan dataset.
+
+    For now this only uses fair information: things a bank is allowed to look at,
+    like income and credit score. I add the unfair part in the next step.
+    """
+    rng = np.random.default_rng(seed)
+
+    # the sensitive detail. 0 and 1 are just two groups. no meaning to the numbers.
+    gender = rng.integers(0, 2, size=n_samples)
+
+    # the fair information.
+    age = rng.normal(40, 12, n_samples).clip(18, 80)
+    income = rng.normal(55_000, 20_000, n_samples).clip(12_000, 250_000)
+    employment_years = rng.normal(8, 6, n_samples).clip(0, 45)
+    credit_score = rng.normal(660, 90, n_samples).clip(300, 850)
+    loan_amount = rng.normal(18_000, 9_000, n_samples).clip(1_000, 100_000)
+    debt_to_income = (loan_amount / income).clip(0, 3)
+
+    # a hidden "true score" of how safe the loan is. built ONLY from fair info.
+    # higher number means safer loan.
+    z = (
+        0.000045 * (income - 55_000)
+        + 0.012 * (credit_score - 660)
+        + 0.05 * (employment_years - 8)
+        - 1.4 * (debt_to_income - 0.33)
+        + rng.normal(0, 1, n_samples)   # a little randomness, like real life
+    )
+
+    # turn the score into a yes/no answer.
+    approval_prob = 1 / (1 + np.exp(-z))   # squashes score into 0..1
+    approved = (rng.uniform(0, 1, n_samples) < approval_prob).astype(int)
+
+    df = pd.DataFrame(
+        {
+            "age": age.round(0),
+            "income": income.round(0),
+            "employment_years": employment_years.round(1),
+            "credit_score": credit_score.round(0),
+            "loan_amount": loan_amount.round(0),
+            "debt_to_income": debt_to_income.round(3),
+            SENSITIVE_ATTR: gender,
+            TARGET: approved,
+        }
+    )
+    return df
