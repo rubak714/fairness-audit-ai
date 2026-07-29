@@ -112,3 +112,10 @@ def audit(y_true, y_pred, group, label: str) -> AuditResult:
 # The fix: use a different yes/no cutoff for each group so they end up equally
 # fair. I never retrain the model, I only move the cutoff line.
 # ----------------------------------------------------------------------------
+
+def find_group_thresholds(y_true, y_prob, group, grid=None):
+    """Find a good cutoff for each group so their TPRs match.
+    Group 1 stays at the normal 0.5. I search the best cutoff for group 0."""
+    if grid is None:
+        grid = np.linspace(0.05, 0.95, 181)   # a list of cutoffs to try
+    return {0: 0.5, 1: 0.5}   # placeholder, I fill in the real search next
