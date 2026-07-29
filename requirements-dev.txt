@@ -1,0 +1,3 @@
+# extra tools I only need while developing and testing, not for running the demo
+-r requirements.txt
+pytest>=8.0
