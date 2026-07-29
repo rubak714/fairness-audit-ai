@@ -118,4 +118,22 @@ def find_group_thresholds(y_true, y_prob, group, grid=None):
     Group 1 stays at the normal 0.5. I search the best cutoff for group 0."""
     if grid is None:
         grid = np.linspace(0.05, 0.95, 181)   # a list of cutoffs to try
-    return {0: 0.5, 1: 0.5}   # placeholder, I fill in the real search next
+
+    y_true = np.asarray(y_true)
+    y_prob = np.asarray(y_prob)
+    group = np.asarray(group)
+
+    # group 1 stays at 0.5. its TPR is the target I want group 0 to match.
+    thr = {1: 0.5}
+    _, target_tpr = _rates(y_true, (y_prob >= 0.5).astype(int), group, 1)
+
+    # for group 0, try every cutoff and keep the closest match.
+    best_t, best_gap = 0.5, np.inf
+    for t in grid:
+        preds = (y_prob >= t).astype(int)
+        _, tpr0 = _rates(y_true, preds, group, 0)
+        gap = abs(tpr0 - target_tpr)
+        if gap < best_gap:
+            best_gap, best_t = gap, t
+    thr[0] = float(best_t)
+    return thr
