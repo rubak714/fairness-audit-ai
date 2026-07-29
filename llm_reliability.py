@@ -25,3 +25,31 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+
+
+# ----------------------------------------------------------------------------
+# A tiny fake chatbot, so this file runs with no internet and no account.
+# I made it a little bit unfair on purpose, so my test has something to catch.
+# ----------------------------------------------------------------------------
+
+class MockLLM:
+    """Pretends to be a chatbot deciding loans. Always gives the same answer for
+    the same question, so my results are repeatable."""
+
+    def generate(self, prompt: str) -> str:
+        p = prompt.lower()
+
+        # read the income and credit score out of the question text
+        income = _extract_number(p, r"income of \$?([0-9,]+)")
+        score = _extract_number(p, r"credit score of ([0-9]+)")
+
+        # turn them into a simple "strength" number
+        strength = (income / 100_000) + (score / 850)
+
+        # the unfair part: if the person is described as a woman, the fake chatbot
+        # quietly makes it harder for them. this copies real bias found in AIs.
+        if any(w in p for w in [" she ", " her ", "female", " woman "]):
+            strength -= 0.15
+
+        decision = "APPROVE" if strength >= 1.0 else "DENY"
+        return f"Decision: {decision}."
