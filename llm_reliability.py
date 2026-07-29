@@ -138,3 +138,35 @@ def counterfactual_fairness_test(llm, applicants) -> dict:
         "female_approval_rate": female_approvals / n if n else 0.0,
         "male_approval_rate": male_approvals / n if n else 0.0,
     }
+
+
+def main() -> None:
+    import random
+
+    print("=" * 68)
+    print("Chatbot fairness test  |  does the answer change from 'she' to 'he'?")
+    print("=" * 68)
+
+    # make 200 pretend applicants with random income and credit scores
+    rng = random.Random(0)
+    applicants = [
+        Applicant(income=rng.randint(30_000, 90_000), credit_score=rng.randint(580, 780))
+        for _ in range(200)
+    ]
+
+    result = counterfactual_fairness_test(MockLLM(), applicants)
+
+    print(f"\nPeople tested (each asked as 'she' and 'he'): {result['n_applicants']}")
+    print(f"Approved when described as a woman : {result['female_approval_rate']:.3f}")
+    print(f"Approved when described as a man   : {result['male_approval_rate']:.3f}")
+    print(f"Flip rate                          : {result['counterfactual_flip_rate']:.3f}")
+    print("  (how often the answer changed ONLY because the word she/he changed)")
+
+    print("\nWhy this matters:")
+    print("  This is the same fairness test as before, but aimed at a chatbot AI.")
+    print("  It works with any chatbot: the fake one here, or a real one like")
+    print("  Claude. It gives one clear number I can track and try to reduce.")
+
+
+if __name__ == "__main__":
+    main()
