@@ -119,4 +119,24 @@ the unfairness drops almost to zero.
 
 ![Accuracy vs fairness chart](results/accuracy_fairness_tradeoff.png)
 
+## Glossary (plain English)
+
+- **AI model / classifier.** A program that looks at information and makes a yes
+  or no guess. Here it guesses "approve this loan" or "reject it".
+- **LLM (large language model).** A chatbot style AI, like the one behind ChatGPT
+  or Claude. It reads text and writes text back.
+- **Bias / unfairness.** When the AI treats one group of people worse than
+  another, for no fair reason.
+- **Sensitive attribute.** A personal detail we must be careful with, like gender
+  or race.
+- **Accuracy.** How often the AI's guess is correct overall.
+- **Fairness metric.** A number that measures how fairly the AI treats different
+  groups.
+- **Threshold.** The cutoff line for a yes or no decision. Move the line and you
+  change how many people get approved.
+- **Counterfactual test.** Change one small detail (like "she" to "he"), keep
+  everything else the same, and see if the answer changes.
+- **MLOps.** The practice of running AI systems reliably in the real world, the
+  way IT teams keep servers running.
+
 Work in progress. More coming soon.
