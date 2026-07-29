@@ -15,6 +15,7 @@ It prints a before and after report, and saves a chart in the results folder.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 
 import numpy as np
@@ -147,3 +148,25 @@ def apply_group_thresholds(y_prob, group, thresholds) -> np.ndarray:
     for g, t in thresholds.items():
         out[group == g] = (y_prob[group == g] >= t).astype(int)
     return out
+
+
+# ----------------------------------------------------------------------------
+# The chart. One picture beats a table of numbers.
+# ----------------------------------------------------------------------------
+
+def plot_tradeoff(before: AuditResult, after: AuditResult, out_path: str) -> None:
+    import matplotlib
+
+    matplotlib.use("Agg")   # just save a file, no pop-up window needed
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    sns.set_theme(style="whitegrid")
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    # I fill in the two bar charts in the next step.
+
+    fig.tight_layout()
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    print(f"\nSaved the chart to: {out_path}")
