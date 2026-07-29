@@ -86,4 +86,20 @@ python llm_reliability.py   # step 3: test the chatbot AI
 It all runs on your own computer. You do not need the internet. You do not need a
 paid AI account. To run the tests: `pip install -r requirements-dev.txt` then `pytest`.
 
+## The three fairness numbers, in plain words
+
+I wrote these three checks myself, by hand, so I truly understand them.
+
+1. **Statistical parity.** Do both groups get approved at the same rate? Easy to
+   understand. But it ignores who actually deserved a loan.
+2. **Disparate impact.** The same idea, but written as a ratio. A famous rule
+   says that if one group gets under 80% of what the other gets, that is a
+   warning sign.
+3. **Equal opportunity.** Out of the people who would truly repay the loan, do
+   both groups get approved equally? I trust this one the most. It is fair to
+   people who deserve the loan, no matter their group.
+
+There is no single "correct" fairness number. Picking one is a choice about
+values. Being honest about that choice is part of doing this the right way.
+
 Work in progress. More coming soon.
