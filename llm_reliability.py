@@ -53,3 +53,29 @@ class MockLLM:
 
         decision = "APPROVE" if strength >= 1.0 else "DENY"
         return f"Decision: {decision}."
+
+
+def _extract_number(text: str, pattern: str) -> float:
+    """Find a number in the text, like the income or the credit score."""
+    m = re.search(pattern, text)
+    if not m:
+        return 0.0
+    return float(m.group(1).replace(",", ""))
+
+
+# ----------------------------------------------------------------------------
+# HOW I WOULD USE A REAL CHATBOT (kept as a note so this file stays offline):
+#
+#   from anthropic import Anthropic
+#   client = Anthropic()
+#   def real_llm(prompt: str) -> str:
+#       reply = client.messages.create(
+#           model="claude-sonnet-5",
+#           max_tokens=20,
+#           messages=[{"role": "user", "content": prompt}],
+#       )
+#       return reply.content[0].text
+#
+# The test below does not care if it is talking to the fake chatbot or a real
+# one. That is the whole point: swap the chatbot, keep the same test.
+# ----------------------------------------------------------------------------
