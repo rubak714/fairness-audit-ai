@@ -1,9 +1,9 @@
 """
 make_diagram.py
 
-Draws the project workflow as a hand-drawn whiteboard picture and saves it to
-docs/workflow.png. I use matplotlib's sketch style so the boxes and arrows look
-like they were drawn by hand on a whiteboard.
+Draws the project workflow and saves it to docs/workflow.png. Clean straight
+boxes with colored outlines on a white background, so it reads like a tidy
+whiteboard rather than a hand-drawn sketch.
 
 Run:  python make_diagram.py
 """
@@ -48,8 +48,6 @@ def arrow(ax, start, end, label="", color="#444444", style="-|>", dashed=False):
 
 
 def main():
-    plt.xkcd(scale=1.0, length=100, randomness=2)  # the hand-drawn look
-
     fig, ax = plt.subplots(figsize=(12, 8))
     ax.set_xlim(0, 12)
     ax.set_ylim(0, 9)
