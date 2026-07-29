@@ -54,4 +54,12 @@ flowchart TB
     class J human;
 ```
 
+## What the project shows, in one line each
+
+1. Hiding someone's gender from the model does not make it fair. It still learns
+   to be unfair in an indirect way.
+2. I can measure that unfairness with three simple numbers.
+3. I can reduce the unfairness with a small change, and barely lose any accuracy.
+4. The same fairness check also works on a chatbot AI.
+
 Work in progress. More coming soon.
