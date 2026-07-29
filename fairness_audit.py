@@ -15,7 +15,10 @@ It prints a before and after report, and saves a chart in the results folder.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import numpy as np
+from sklearn.metrics import accuracy_score
 
 
 # ----------------------------------------------------------------------------
@@ -71,3 +74,35 @@ def equal_opportunity_difference(y_true, y_pred, group) -> float:
     _, tpr0 = _rates(y_true, y_pred, group, 0)
     _, tpr1 = _rates(y_true, y_pred, group, 1)
     return float(tpr0 - tpr1)
+
+
+@dataclass
+class AuditResult:
+    """Holds all the numbers for one run, so I can print them neatly."""
+
+    label: str
+    accuracy: float
+    stat_parity_diff: float
+    disparate_impact: float
+    equal_opp_diff: float
+
+    def show(self) -> None:
+        print(f"\n[{self.label}]")
+        print(f"  Accuracy (how often it is right) : {self.accuracy:.3f}")
+        print(f"  Statistical parity difference    : {self.stat_parity_diff:+.3f}  (0 = fair)")
+        print(f"  Disparate impact ratio           : {self.disparate_impact:.3f}  (1 = fair, below 0.8 = warning)")
+        print(f"  Equal opportunity difference     : {self.equal_opp_diff:+.3f}  (0 = fair)")
+
+
+def audit(y_true, y_pred, group, label: str) -> AuditResult:
+    """Run all three checks plus accuracy, and hand back the numbers."""
+    y_true = np.asarray(y_true)
+    y_pred = np.asarray(y_pred)
+    group = np.asarray(group)
+    return AuditResult(
+        label=label,
+        accuracy=accuracy_score(y_true, y_pred),
+        stat_parity_diff=statistical_parity_difference(y_pred, group),
+        disparate_impact=disparate_impact(y_pred, group),
+        equal_opp_diff=equal_opportunity_difference(y_true, y_pred, group),
+    )
