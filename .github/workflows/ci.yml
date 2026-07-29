@@ -1,0 +1,28 @@
+# This runs my tests automatically on GitHub every time I push.
+# It is a small taste of the "keep things reliable" habit I care about: if a
+# change breaks a test, I want GitHub to tell me, not a user.
+
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run the tests
+        run: pytest -q
