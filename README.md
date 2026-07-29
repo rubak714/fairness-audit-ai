@@ -114,4 +114,9 @@ different.
 - On the chatbot test, just changing "she" to "he" flipped the decision for about
   **11 out of every 100 people**.
 
+The chart below tells the story. On the left, accuracy barely moves. On the right,
+the unfairness drops almost to zero.
+
+![Accuracy vs fairness chart](results/accuracy_fairness_tradeoff.png)
+
 Work in progress. More coming soon.
