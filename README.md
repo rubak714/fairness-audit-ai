@@ -62,4 +62,13 @@ flowchart TB
 3. I can reduce the unfairness with a small change, and barely lose any accuracy.
 4. The same fairness check also works on a chatbot AI.
 
+## The files
+
+| File | What it does, simply |
+| --- | --- |
+| `model.py` | Makes a pretend loan dataset. Some unfairness is hidden inside it on purpose. Then it trains a basic AI model. |
+| `fairness_audit.py` | Measures the unfairness with three numbers. Then fixes most of it. Then draws a chart. |
+| `llm_reliability.py` | Tests a chatbot style AI. It changes "she" to "he" in a question and checks if the answer changes. |
+| `tests/` | Small unit tests that check the data, the metrics, and the chatbot probe. |
+
 Work in progress. More coming soon.
