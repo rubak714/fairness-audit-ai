@@ -102,4 +102,16 @@ I wrote these three checks myself, by hand, so I truly understand them.
 There is no single "correct" fairness number. Picking one is a choice about
 values. Being honest about that choice is part of doing this the right way.
 
+## What happened when I ran it
+
+These results come straight from my scripts. Your numbers may be a tiny bit
+different.
+
+- The model was about **71% accurate**. But it was still unfair between the two
+  groups, even though I never told it anyone's gender. Hiding gender did not help.
+- One small fix removed almost all of the unfairness. The accuracy dropped by
+  less than 1%. That is a great trade.
+- On the chatbot test, just changing "she" to "he" flipped the decision for about
+  **11 out of every 100 people**.
+
 Work in progress. More coming soon.
