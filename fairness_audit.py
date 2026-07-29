@@ -164,8 +164,33 @@ def plot_tradeoff(before: AuditResult, after: AuditResult, out_path: str) -> Non
     sns.set_theme(style="whitegrid")
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-    # I fill in the two bar charts in the next step.
+    labels = ["Before", "After the fix"]
+    acc = [before.accuracy, after.accuracy]
+    # I show unfairness as a distance from 0, so smaller bars mean more fair.
+    unfairness = [abs(before.equal_opp_diff), abs(after.equal_opp_diff)]
 
+    # left chart: accuracy should stay high. I add headroom so the number above
+    # the bar never bumps into the title.
+    sns.barplot(x=labels, y=acc, ax=axes[0], hue=labels, legend=False, palette="Blues_d")
+    axes[0].set_ylim(0, 1.1)
+    axes[0].set_title("Accuracy (we want this to stay high)", pad=12)
+    for i, v in enumerate(acc):
+        axes[0].text(i, v + 0.02, f"{v:.3f}", ha="center", fontweight="bold")
+
+    # right chart: unfairness should drop toward zero. same headroom trick.
+    top = max(unfairness) * 1.35 if max(unfairness) > 0 else 1.0
+    sns.barplot(x=labels, y=unfairness, ax=axes[1], hue=labels, legend=False, palette="Reds_d")
+    axes[1].set_ylim(0, top)
+    axes[1].set_title("Unfairness (we want this near zero)", pad=12)
+    for i, v in enumerate(unfairness):
+        axes[1].text(i, v + top * 0.03, f"{v:.3f}", ha="center", fontweight="bold")
+
+    fig.suptitle(
+        "I removed almost all the unfairness and barely lost any accuracy",
+        fontsize=13,
+        fontweight="bold",
+        y=1.02,
+    )
     fig.tight_layout()
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
