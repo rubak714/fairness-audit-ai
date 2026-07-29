@@ -5,7 +5,7 @@ I check two things: the dataset looks how I expect, and the unfairness I claim t
 inject is actually there. That second test is the important one.
 """
 
-from model import SENSITIVE_ATTR, TARGET, generate_loan_dataset
+from model import SENSITIVE_ATTR, TARGET, generate_loan_dataset, train_baseline
 
 
 def test_dataset_has_expected_shape_and_columns():
@@ -23,3 +23,13 @@ def test_dataset_actually_contains_the_bias():
     rate_group0 = df[df[SENSITIVE_ATTR] == 0][TARGET].mean()
     rate_group1 = df[df[SENSITIVE_ATTR] == 1][TARGET].mean()
     assert rate_group0 < rate_group1
+
+
+def test_model_trains_and_hides_the_sensitive_attribute():
+    df = generate_loan_dataset(n_samples=1000, seed=0)
+    trained = train_baseline(df)
+    # probabilities must sit between 0 and 1
+    assert trained.y_prob.min() >= 0.0
+    assert trained.y_prob.max() <= 1.0
+    # the model must not have been given the sensitive attribute
+    assert SENSITIVE_ATTR not in trained.feature_names
