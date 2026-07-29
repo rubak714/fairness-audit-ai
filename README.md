@@ -24,39 +24,41 @@ config:
   theme: neutral
 ---
 flowchart TB
-    subgraph DATA["📋 1. DATA  (model.py)"]
-        A["Make loan applicants<br/>from fair features"]
-        B["Hide an unfair penalty<br/>inside the answers"]
-        A --> B
-    end
+    A["📋 Make loan data<br/>bias hidden in the answers"]
+    B["🤖 Train the model<br/>WITHOUT gender"]
 
-    subgraph MODEL["🤖 2. MODEL  (model.py)"]
-        C["Train the model<br/>WITHOUT gender"]
-        D["Give each person<br/>a score from 0 to 1"]
-        C --> D
-    end
-
-    subgraph AUDIT["⚖️ 3. AUDIT  (fairness_audit.py)"]
+    subgraph AUDIT["⚖️ Fairness audit  (fairness_audit.py)"]
         E["Measure 3 fairness numbers"]
         F["Give each group<br/>its own yes/no cutoff"]
         G["Draw a before / after chart"]
-        E --> F --> G
+        E -->|"if unfair"| F --> G
     end
 
-    subgraph LLM["💬 4. SAME TEST ON A CHATBOT  (llm_reliability.py)"]
-        H["Ask 'she' and 'he'<br/>versions of one question"]
-        I["Count how often<br/>the answer flips"]
-        H --> I
-    end
+    H["💬 Same test on a chatbot<br/>swap 'she' and 'he'"]
+    J(("🧑‍⚖️ Human<br/>reviewer"))
+    K["✅ Fairer decision<br/>for a real person"]
 
-    DATA --> MODEL --> AUDIT
-    MODEL -. same fairness idea .-> LLM
-    AUDIT --> J(("🧑‍⚖️ Human<br/>reviewer"))
-    LLM --> J
-    J --> K["✅ Fairer decision<br/>for a real person"]
+    A -->|"applicants"| B
+    B -->|"scores 0 to 1"| AUDIT
+    B -. "same fairness idea" .-> H
+    AUDIT --> J
+    H --> J
+    J -->|"final call"| K
 
-    classDef human fill:#fff3c4,stroke:#e0a000,stroke-width:2px,color:#000;
+    classDef data stroke:#c026d3,stroke-width:3px,color:#000;
+    classDef model stroke:#ea580c,stroke-width:3px,color:#000;
+    classDef box stroke:#06b6d4,stroke-width:3px,color:#000;
+    classDef llm stroke:#2563eb,stroke-width:3px,color:#000;
+    classDef human fill:#fff3c4,stroke:#e0a000,stroke-width:3px,color:#000;
+    classDef good stroke:#16a34a,stroke-width:3px,color:#000;
+
+    class A data;
+    class B model;
+    class AUDIT box;
+    class E,F,G box;
+    class H llm;
     class J human;
+    class K good;
 ```
 
 ## ✨ What the project shows, in one line each
