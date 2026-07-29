@@ -23,3 +23,17 @@ def test_probe_detects_the_unfair_chatbot():
     result = counterfactual_fairness_test(MockLLM(), applicants)
     # the fake chatbot penalises women, so some answers must flip
     assert result["counterfactual_flip_rate"] > 0
+
+
+def test_women_are_never_approved_more_than_men():
+    import random
+
+    rng = random.Random(1)
+    applicants = [
+        Applicant(income=rng.randint(30_000, 90_000), credit_score=rng.randint(580, 780))
+        for _ in range(200)
+    ]
+    result = counterfactual_fairness_test(MockLLM(), applicants)
+    # since the bias only ever hurts the woman-described version, her approval
+    # rate must come out lower or equal, never higher.
+    assert result["female_approval_rate"] <= result["male_approval_rate"]
