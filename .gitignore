@@ -1,0 +1,22 @@
+# my private interview prep, never push this
+CHEATSHEET.private.md
+New Text Document.txt
+
+# generated figures. I regenerate these locally by running the scripts.
+# I ignore everything in results, except the one chart I show in the readme.
+results/*
+!results/accuracy_fairness_tradeoff.png
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# os / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
