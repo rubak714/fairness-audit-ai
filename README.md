@@ -1,4 +1,4 @@
-# FairnessAudit-AI
+# ⚖️ FairnessAudit-AI
 
 A small toolkit I am building to check AI models for unfairness, fix some of it,
 and run the same check on chatbot AIs (LLMs).
@@ -59,7 +59,7 @@ flowchart TB
     class J human;
 ```
 
-## What the project shows, in one line each
+## ✨ What the project shows, in one line each
 
 1. Hiding someone's gender from the model does not make it fair. It still learns
    to be unfair in an indirect way.
@@ -67,7 +67,7 @@ flowchart TB
 3. I can reduce the unfairness with a small change, and barely lose any accuracy.
 4. The same fairness check also works on a chatbot AI.
 
-## The files
+## 📁 The files
 
 | File | What it does, simply |
 | --- | --- |
@@ -76,7 +76,7 @@ flowchart TB
 | `llm_reliability.py` | Tests a chatbot style AI. It changes "she" to "he" in a question and checks if the answer changes. |
 | `tests/` | Small unit tests that check the data, the metrics, and the chatbot probe. |
 
-## How to run it
+## 🚀 How to run it
 
 You type these lines one at a time in a terminal:
 
