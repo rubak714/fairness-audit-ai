@@ -195,3 +195,46 @@ def plot_tradeoff(before: AuditResult, after: AuditResult, out_path: str) -> Non
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     print(f"\nSaved the chart to: {out_path}")
+
+
+def main() -> None:
+    from model import generate_loan_dataset, train_baseline
+
+    print("=" * 68)
+    print("FairnessAudit-AI  |  checking a loan model for unfairness")
+    print("=" * 68)
+
+    # step 1: get the data and the trained model from the other file
+    df = generate_loan_dataset()
+    trained = train_baseline(df)
+
+    y_true = trained.y_test.to_numpy()          # the correct answers
+    group = trained.sensitive_test.to_numpy()   # which group each person is in
+    y_prob = trained.y_prob                      # the model's scores
+
+    # before the fix: same 0.5 cutoff for everyone
+    baseline_pred = (y_prob >= 0.5).astype(int)
+    before = audit(y_true, baseline_pred, group, "BEFORE  (same cutoff for everyone)")
+    before.show()
+
+    # the fix: a different cutoff for each group
+    thresholds = find_group_thresholds(y_true, y_prob, group)
+    print(f"\nCutoff chosen for each group: {thresholds}")
+    direction = "a higher cutoff" if thresholds[0] > thresholds[1] else "a lower cutoff"
+    print(f"(to make the groups equally fair, group 0 needs {direction} than group 1)")
+
+    # after the fix
+    mitigated_pred = apply_group_thresholds(y_prob, group, thresholds)
+    after = audit(y_true, mitigated_pred, group, "AFTER   (each group has its own cutoff)")
+    after.show()
+
+    plot_tradeoff(before, after, os.path.join("results", "accuracy_fairness_tradeoff.png"))
+
+    print("\nWhat I learned here:")
+    print("  I never gave the model anyone's gender, yet it was still unfair.")
+    print("  A small change to the cutoff removed most of the unfairness, and I")
+    print("  barely lost any accuracy. Making that trade clear is the whole point.")
+
+
+if __name__ == "__main__":
+    main()
