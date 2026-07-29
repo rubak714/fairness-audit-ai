@@ -91,7 +91,7 @@ python llm_reliability.py   # step 3: test the chatbot AI
 It all runs on your own computer. You do not need the internet. You do not need a
 paid AI account. To run the tests: `pip install -r requirements-dev.txt` then `pytest`.
 
-## The three fairness numbers, in plain words
+## 📊 The three fairness numbers, in plain words
 
 I wrote these three checks myself, by hand, so I truly understand them.
 
@@ -107,7 +107,7 @@ I wrote these three checks myself, by hand, so I truly understand them.
 There is no single "correct" fairness number. Picking one is a choice about
 values. Being honest about that choice is part of doing this the right way.
 
-## What happened when I ran it
+## 📈 What happened when I ran it
 
 These results come straight from my scripts. Your numbers may be a tiny bit
 different.
@@ -124,7 +124,7 @@ the unfairness drops almost to zero.
 
 ![Accuracy vs fairness chart](results/accuracy_fairness_tradeoff.png)
 
-## Glossary (plain English)
+## 📖 Glossary (plain English)
 
 - **AI model / classifier.** A program that looks at information and makes a yes
   or no guess. Here it guesses "approve this loan" or "reject it".
@@ -144,7 +144,7 @@ the unfairness drops almost to zero.
 - **MLOps.** The practice of running AI systems reliably in the real world, the
   way IT teams keep servers running.
 
-## What this project cannot do yet (being honest)
+## ⚠️ What this project cannot do yet (being honest)
 
 I would rather say these first than have someone catch me.
 
@@ -156,7 +156,7 @@ I would rather say these first than have someone catch me.
 - I only check one thing (gender). Real life is more complex, because people
   belong to many groups at once.
 
-## License
+## 📜 License
 
 MIT. You are free to use it, learn from it, and tell me where I am wrong.
 
