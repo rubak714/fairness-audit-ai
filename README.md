@@ -12,54 +12,15 @@ in action.
 
 ## 🗺️ How it all works (whiteboard workflow)
 
-Here is the whole project sketched on a whiteboard. Data comes in at the top. The
-audit and the fix sit in the middle. A human makes the final call, because a
-person should decide important things, not a machine. The dotted branch shows the
-same fairness idea reused on a chatbot AI.
+Here is the whole project sketched on a whiteboard. Data comes in at the top left.
+The audit sits on the right. A human makes the final call, because a person should
+decide important things, not a machine. The dotted arrow shows the same fairness
+idea reused on a chatbot AI.
 
-```mermaid
----
-config:
-  look: handDrawn
-  theme: neutral
----
-flowchart TB
-    A["📋 Make loan data<br/>bias hidden in the answers"]
-    B["🤖 Train the model<br/>WITHOUT gender"]
+![Whiteboard workflow of FairnessAudit-AI](docs/workflow.png)
 
-    subgraph AUDIT["⚖️ Fairness audit  (fairness_audit.py)"]
-        E["Measure 3 fairness numbers"]
-        F["Give each group<br/>its own yes/no cutoff"]
-        G["Draw a before / after chart"]
-        E -->|"if unfair"| F --> G
-    end
-
-    H["💬 Same test on a chatbot<br/>swap 'she' and 'he'"]
-    J(("🧑‍⚖️ Human<br/>reviewer"))
-    K["✅ Fairer decision<br/>for a real person"]
-
-    A -->|"applicants"| B
-    B -->|"scores 0 to 1"| AUDIT
-    B -. "same fairness idea" .-> H
-    AUDIT --> J
-    H --> J
-    J -->|"final call"| K
-
-    classDef data stroke:#c026d3,stroke-width:3px,color:#000;
-    classDef model stroke:#ea580c,stroke-width:3px,color:#000;
-    classDef box stroke:#06b6d4,stroke-width:3px,color:#000;
-    classDef llm stroke:#2563eb,stroke-width:3px,color:#000;
-    classDef human fill:#fff3c4,stroke:#e0a000,stroke-width:3px,color:#000;
-    classDef good stroke:#16a34a,stroke-width:3px,color:#000;
-
-    class A data;
-    class B model;
-    class AUDIT box;
-    class E,F,G box;
-    class H llm;
-    class J human;
-    class K good;
-```
+I draw this picture from code, so it stays in sync with the project. Regenerate it
+any time with `python make_diagram.py`.
 
 ## ✨ What the project shows, in one line each
 
