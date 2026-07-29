@@ -48,3 +48,26 @@ def statistical_parity_difference(y_pred, group) -> float:
     r0 = y_pred[group == 0].mean()
     r1 = y_pred[group == 1].mean()
     return float(r0 - r1)
+
+
+def disparate_impact(y_pred, group) -> float:
+    """The same idea, but as a ratio: group 0 rate divided by group 1 rate.
+
+    There is a well known rule: below 0.8 is a warning sign of unfairness.
+    1.0 means both groups are treated equally.
+    """
+    r0 = y_pred[group == 0].mean()
+    r1 = y_pred[group == 1].mean()
+    return float(r0 / r1) if r1 > 0 else float("nan")
+
+
+def equal_opportunity_difference(y_true, y_pred, group) -> float:
+    """Compare the two groups, but only among people who truly deserved a loan.
+
+    In numbers: TPR of group 0 minus TPR of group 1.
+    This is the one I trust most. It is fair to people who deserve approval, no
+    matter which group they are in. 0 is the fair point.
+    """
+    _, tpr0 = _rates(y_true, y_pred, group, 0)
+    _, tpr1 = _rates(y_true, y_pred, group, 1)
+    return float(tpr0 - tpr1)
