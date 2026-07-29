@@ -106,3 +106,9 @@ def audit(y_true, y_pred, group, label: str) -> AuditResult:
         disparate_impact=disparate_impact(y_pred, group),
         equal_opp_diff=equal_opportunity_difference(y_true, y_pred, group),
     )
+
+
+# ----------------------------------------------------------------------------
+# The fix: use a different yes/no cutoff for each group so they end up equally
+# fair. I never retrain the model, I only move the cutoff line.
+# ----------------------------------------------------------------------------
